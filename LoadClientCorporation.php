@@ -44,17 +44,10 @@ $response = $httpClient->request('GET', 'massUpdate');
 
 // request body
 $requestBody = [
-    "name" => "THE WOLF OF WALL STREET 5",
-    "clientContacts" => [
-        [
-            
-            "firstName" => "Gian",
-            "lastName" => "Vespa"
-        ]
-    ]
+    "name" => "GIANVESPA"
 ];
 
-$response = $httpClient->request('PUT', 'entity/ClientCorporation/16/clientContacts/',
+$response = $httpClient->request('PUT', 'entity/ClientCorporation',
     [
         'json' => $requestBody
     ]

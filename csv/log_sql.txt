@@ -1,0 +1,158 @@
+589091,Raytheon 
+589095,Harvard University 
+589149,Vohra Wound Care 
+589290,Estee Lauder 
+589303,MEDNAX, INC. 
+589504,HealthTrust Purchasing Group , L.P. 
+589640,Office Depot, Inc. 
+653499,Momentum Consulting 
+653939,Value Care at Home 
+658411,GardaWorld 
+667041,Bridge Connector 
+667314,mParticle, Inc. 
+671344,3M 
+671345,ABB Power Electronics 
+671346,Medtronic , Inc. 
+672323,John Deere 
+672601,Argo Group 
+673654,Commonwealth Care Alliance Inc 
+701143,Sonoco Products Company 
+701144,Commscope Holdings Co Inc 
+701716,Roche 
+724141,Becton Dickinson 
+725040,Moog Inc. 
+731266,Freddie Mac 
+734598,Candywriter, LLC 
+736454,Farmers Insurance Exchange 
+765116,Baxter International 
+765125,Unisys 
+765169,SocialChorus Inc 
+765300,Clarivate Analytics 
+765742,Pivot Technology Solutions Inc 
+775209,L3Harris Technologies, Inc. 
+775227,NortonLifeLock 
+794079,eBay Inc 
+794088,Walmart 
+795345,radial 
+796103,TSYS 
+796599,PNC Financial Services Group, Inc 
+811629,General Dynamics Corporation 
+811630,DuPont de Nemours 
+814692,Whirlpool 
+816740,TracFone Wireless Inc 
+816745,amazon 
+816748,Saputo inc 
+816751,Slalom, LLC. 
+816794,Caterpillar Inc. 
+816990,Spok Inc 
+817559,bidtellect.com 
+826741,JM Family Enterprises, Inc. 
+826980,Comcast Corporation 
+826987,10x Genomics 
+827229,BankUnited 
+827368,Ricoh 
+827379,Rockwell Automation 
+827439,ResMed 
+827710,SPX FLOW, Inc 
+828436,Polyconcept North America 
+828576,Red Ventures 
+828668,Brite Core 
+828671,MILLICOM INTERNATIONAL CELLULAR 
+829139,Portland General Electric Co 
+829768,Canon Information and Imaging Solutions , Inc. 
+834412,Jones Lang Lasalle Ip, Inc 
+834414,OfferUp 
+834845,Paylocity 
+834855,STACK Construction Technologies 
+835012,Commvault Systems Inc 
+835014,Natera Inc 
+835016,Zift Solutions Inc 
+835244,Broward Health 
+835254,International Market Centers , L.P. 
+835288,Procurant 
+835476,goPuff 
+835486,Fortress Investment Group 
+835686,Instacart 
+835695,Unqork 
+837110,Lennar 
+837286,Mobile Help 
+837701,System1 
+840637,Elevations Credit Union 
+840650,SafetyChain Software Inc 
+858373,Sterling National Bank 
+858950,NationsBenefits 
+861492,Citrix 
+861495,Bank of the West 
+861501,Gartner , Inc. 
+861502,Enterprise Holdings, Inc. 
+861524,Johnson Controls, Inc. 
+861526,Magic Leap, Inc. 
+861530,Chewy, Inc. 
+861531,The Home Depot Inc 
+861534,Humana Inc. 
+861535,Sheridan Health Corporation 
+861536,Leidos 
+861538,USI Insurance Services 
+'589091,Raytheon' 
+'589095,Harvard University' 
+'589149,Vohra Wound Care' 
+'589290,Estee Lauder' 
+'589303,MEDNAX, INC.' 
+'589504,HealthTrust Purchasing Group , L.P.' 
+'589640,Office Depot, Inc.' 
+'653499,Momentum Consulting' 
+'653939,Value Care at Home' 
+'658411,GardaWorld' 
+'667041,Bridge Connector' 
+'667314,mParticle, Inc.' 
+'671344,3M' 
+'671345,ABB Power Electronics' 
+'671346,Medtronic , Inc.' 
+'672323,John Deere' 
+'672601,Argo Group' 
+'673654,Commonwealth Care Alliance Inc' 
+'701143,Sonoco Products Company' 
+'701144,Commscope Holdings Co Inc' 
+'701716,Roche' 
+'724141,Becton Dickinson' 
+'725040,Moog Inc.' 
+'731266,Freddie Mac' 
+'734598,Candywriter, LLC' 
+'736454,Farmers Insurance Exchange' 
+'765116,Baxter International' 
+'765125,Unisys' 
+'765169,SocialChorus Inc' 
+'765300,Clarivate Analytics' 
+'765742,Pivot Technology Solutions Inc' 
+'775209,L3Harris Technologies, Inc.' 
+'775227,NortonLifeLock' 
+'794079,eBay Inc' 
+'794088,Walmart' 
+'795345,radial' 
+'796103,TSYS' 
+'796599,PNC Financial Services Group, Inc' 
+'811629,General Dynamics Corporation' 
+'811630,DuPont de Nemours' 
+'814692,Whirlpool' 
+'816740,TracFone Wireless Inc' 
+'816745,amazon' 
+'816748,Saputo inc' 
+'816751,Slalom, LLC.' 
+'816794,Caterpillar Inc.' 
+'816990,Spok Inc' 
+'817559,bidtellect.com' 
+'826741,JM Family Enterprises, Inc.' 
+'826980,Comcast Corporation' 
+'826987,10x Genomics' 
+'827229,BankUnited' 
+'827368,Ricoh' 
+'827379,Rockwell Automation' 
+'827439,ResMed' 
+'827710,SPX FLOW, Inc' 
+'828436,Polyconcept North America' 
+'828576,Red Ventures' 
+'828668,Brite Core' 
+'828671,MILLICOM INTERNATIONAL CELLULAR' 
+'829139,Portland General Electric Co' 
+'829768,Canon Information and Imaging Solutions , Inc.' 
+'834412,Jones Lang Lasalle Ip, Inc' 

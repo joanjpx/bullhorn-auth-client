@@ -10,7 +10,7 @@ use Models\ModelClientCorporation;
 
 function getDataFromSqlServer()
 {
-    $model = new ModelClientCorporation();
+    $model = new ModelClientContact();
 
     $allRows = $model::all();
 
