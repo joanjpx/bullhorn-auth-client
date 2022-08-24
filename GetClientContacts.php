@@ -38,35 +38,55 @@ $httpClient = new GuzzleClient([
 // make request 
 
 // mass update
-$response = $httpClient->request('GET', 'massUpdate');
+// $response = $httpClient->request('GET', 'massUpdate');
 
-// Candidate
 
-// request body
-$requestBody = [
-    "name" => "THE WOLF OF WALL STREET 5",
-    "clientContacts" => [
-        [
-            
-            "firstName" => "Gian",
-            "lastName" => "Vespa"
-        ]
-    ]
+$fieldsToQuery = [
+    "id",
+    "category",
+    "clientCorporation",
+    "dateAdded",
+    "dateLastModified",
+    "email",
+    "isDeleted",
+    "massMailOptOut",
+    "numEmployees",
+    "preferredContact",
+    "status",
+    "type",
+    "username"
 ];
 
-$response = $httpClient->request('PUT', 'entity/ClientCorporation/16/clientContacts/',
-    [
-        'json' => $requestBody
-    ]
-);
+
+$url = "entity/ClientContact/48?fields=";
+
+if(!empty($fieldsToQuery))
+{
+    foreach($fieldsToQuery as $field)
+    {
+        $url.=$field.",";
+    }
+
+    $url = substr($url,0,-1);
+}
+
+try{
+
+    $response = $httpClient->request('GET', $url);
+    
+    echo $response->getBody();exit;
+
+}catch(Exception $e){
+    
+    echo $e->getMessage();
+}
+
 
 // myCandidates
 // $response = $httpClient->request('GET', 'entity/Candidate/78/tasks?fields=*');
 
 
 // return json
-echo $response->getBody();
-exit;
 
 
 // https://rest34.bullhornstaffing.com/rest-services/9r1i90/massUpdate?BhRestToken=86334f0e-d42f-416b-b4cb-026caa03d6df -> URL de Example como consumir logeado

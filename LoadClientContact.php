@@ -38,34 +38,79 @@ $httpClient = new GuzzleClient([
 // make request 
 
 // mass update
-$response = $httpClient->request('GET', 'massUpdate');
+// $response = $httpClient->request('GET', 'massUpdate');
 
 // Candidate
 
 // request body
+
+$fieldsToQuery = [
+    
+];
+
+// "firstName": "JOAN",
+//     "lastName": "PEREZ",
+//     "clientCorporation": {
+//       "id": 17
+//     },
+//     "address": {
+//       "zip": null,
+//       "address2": null,
+//       "city": null,
+//       "address1": null,
+//       "countryName": "United States",
+//       "countryID": 1
+//     },
+//     "phone": null,
+//     "name": "JOAN PEREZ",
+//     "fax": null,
+//     "email": "joansyn.s@gmail.com",
+//     "status": "Active"
+
 $requestBody = [
-    "firstName" => "Jonah",
-    "middleName" => "R",
-    "lastName" => "Hill",
-    "email" => "jhill@test.com",
-    "status" => "02-Active"
+    "occupation" => "Software Engineer",
+    "firstName" => "JOAN",
+    "lastName" => "PEREZ",
+    "clientCorporation" => [
+        "id" => 17
+    ],
+    "address" => [
+        "zip" => null,
+        "address2" => null,
+        "city" => null,
+        "address1" => null,
+        "countryName" => "United States",
+        "countryID" => 1,
+    ],
+    "phone" => "923471754",
+    "name" => "JOAN PEREZ",
+    "fax" => null,
+    "email" => "joansynn.s@gmail.com",
+    "status" => "Active"
 ];
 
 
+try{
 
-// $response = $httpClient->request('PUT', 'entity/Candidate',
-//     [
-//         'json' => $requestBody
-//     ]
-// );
+    $response = $httpClient->request('PUT', 'entity/ClientContact',
+        [
+            'json' => $requestBody
+        ]
+    );
+    
+    echo $response->getBody();exit;
+
+}catch(Exception $e){
+    
+    echo $e->getMessage();
+}
+
 
 // myCandidates
-// $response = $httpClient->request('GET', 'entity/Candidate/78/tasks?fields=*');
+// $response = $httpClient->request('GET', 'entity/Candidate/78?fields=*');
 
 
 // return json
-echo $response->getBody();
-exit;
 
 
 // https://rest34.bullhornstaffing.com/rest-services/9r1i90/massUpdate?BhRestToken=86334f0e-d42f-416b-b4cb-026caa03d6df -> URL de Example como consumir logeado

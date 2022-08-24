@@ -59,9 +59,8 @@ $requestBody = [
 //     ]
 // );
 
-// myCandidates
-// $response = $httpClient->request('GET', 'entity/Candidate/78/tasks?fields=*');
 
+$response = $httpClient->request('GET', 'entity/Candidate/93?fields=id,firstName,middleName,lastName,status');
 
 // return json
 echo $response->getBody();

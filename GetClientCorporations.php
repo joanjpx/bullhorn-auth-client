@@ -44,29 +44,40 @@ $response = $httpClient->request('GET', 'massUpdate');
 
 // request body
 $requestBody = [
-    "name" => "THE WOLF OF WALL STREET 5",
-    "clientContacts" => [
-        [
-            
-            "firstName" => "Gian",
-            "lastName" => "Vespa"
-        ]
-    ]
+    // "title" => "Senior Business Manager",
+    "name" => "Joan",
+    // "middleName" => "P.",
+    // "lastName" => "Alvarado",
+    // "email" => "jperez@test.com",
+    // "status" => "02-Active",
+    // "address" => "909 River Road, Piscataway, 08854",
+    // "phone" => "973-555-1212",
+    // "ClientCorporationId" => 8,
+    // "clientCorporationId" => 8,
+    // "ClientCorporationID" => 8,
 ];
 
-$response = $httpClient->request('PUT', 'entity/ClientCorporation/16/clientContacts/',
-    [
-        'json' => $requestBody
-    ]
-);
+
+try{
+
+    // $response = $httpClient->request('GET', 'entity/MyClientContacts');
+    $response = $httpClient->request('GET', 'entity/ClientCorporation/16?fields=name,clientContacts');
+    // $response = $httpClient->request('GET', 'entity/ClientCorporation/4?fields=name,clientContacts');
+    // $response = $httpClient->request('GET', 'meta/ClientContact?fields=*&meta=basic');
+    
+    echo $response->getBody();exit;
+
+}catch(Exception $e){
+    
+    echo $e->getMessage();
+}
+
 
 // myCandidates
 // $response = $httpClient->request('GET', 'entity/Candidate/78/tasks?fields=*');
 
 
 // return json
-echo $response->getBody();
-exit;
 
 
 // https://rest34.bullhornstaffing.com/rest-services/9r1i90/massUpdate?BhRestToken=86334f0e-d42f-416b-b4cb-026caa03d6df -> URL de Example como consumir logeado

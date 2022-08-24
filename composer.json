@@ -14,14 +14,17 @@
     "minimum-stability": "stable",
     "require": {
         "league/oauth2-client": "^2.3",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "illuminate/database": "^9.26"
     },
     "autoload": {
         "classmap": [
-            "src/"
+            "src/",
+            "Models/"
         ],
         "psr-4": {
-            "jonathanraftery\\Bullhorn\\REST\\Authentication\\": "src/"
+            "jonathanraftery\\Bullhorn\\REST\\Authentication\\": "src/",
+            "Models\\" : "Models/"
         }
     },
     "require-dev": {
