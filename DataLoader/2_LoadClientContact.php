@@ -5,6 +5,7 @@ require "../config/database.php";
 require "../Models/ModelClientCorporation.php";
 #Entity
 use Illuminate\Database\Capsule\Manager as DB;
+use Models\ModelClientContact;
 use Models\ModelClientCorporation;
 
 
@@ -18,7 +19,7 @@ function getDataFromSqlServer()
 
     foreach($allRows as $row)
     {
-
+        
     }
 }
 
