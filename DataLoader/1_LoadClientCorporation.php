@@ -1,6 +1,9 @@
 <?php
-require getcwd()."/vendor/autoload.php";
-require getcwd()."/config/database.php";
+require "../vendor/autoload.php";
+require "../config/database.php";
+
+#Models
+require "../Models/ModelClientCorporation.php";
 
 #Entity
 use Illuminate\Database\Capsule\Manager as DB;
@@ -18,7 +21,7 @@ function getDataFromSqlServer()
     // echo __DIR__, ' | ', getcwd();exit;
     $model = new ModelClientCorporation();
 
-    $rows = file(getcwd().'/DataLoader/cc_log_saveds.txt');
+    $rows = file(getcwd().'/ClientCorporation_log.txt');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
 
@@ -35,7 +38,7 @@ function getDataFromSqlServer()
     {
         $bhId = uploadDataToBullhorn($row->Name);
 
-        @shell_exec('echo "'.$row->CompanyID.'","'.$row->Name.'","'.$bhId.'" >> cc_log_saveds.txt');
+        @shell_exec('echo "'.$row->CompanyID.'","'.$row->Name.'","'.$bhId.'" >> ClientCorporation_log.txt');
         sleep(3);
     }
 }

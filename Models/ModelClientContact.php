@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModelClientContact extends Model
 {
-    protected $table = "centro_costos";
+    protected $table = "Contact";
 
     public $timestamps = false;
 

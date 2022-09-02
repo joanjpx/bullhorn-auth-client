@@ -2,13 +2,10 @@
 require "../vendor/autoload.php";
 require "../config/database.php";
 #Models
-require "../Models/ModelClientCorporation.php";
+require "../Models/ModelCandidate.php";
 #Entity
 use Illuminate\Database\Capsule\Manager as DB;
 use Models\ModelCandidate;
-use Models\ModelClientContact;
-use Models\ModelClientCorporation;
-use Models\ModelClientClient;
 
 use jonathanraftery\Bullhorn\Rest\Authentication\Client;
 use GuzzleHttp\Client as GuzzleClient;
@@ -25,7 +22,8 @@ function getDataFromSqlServer()
         "Contact.ContactID",
         "=",
         "Candidate.ContactID"
-    );
+    )->where('IsCandidateOnly','1')
+    ->orderBy('FullName','ASC');
 
     $allRows = $model->get();
 
@@ -58,7 +56,6 @@ function formatData(ModelCandidate $data)
         "companyName" => $data->CurrentEmployer,
         "firstName" => $data->FirstName,
         "name" => $data->FullName,
-        // "middleName" => $data
         "lastName" => $data->LastName,
         "occupation" => $data->Position,
         "mobile" => $data->Mobile,
@@ -68,8 +65,6 @@ function formatData(ModelCandidate $data)
         "dateOfBirth" => $data->DateOfBirth,
         "companyURL" => $data->LinkedInUrl
     ];
-
-    print_r($entity);
 
     return uploadDataToBullhorn($entity);
 }

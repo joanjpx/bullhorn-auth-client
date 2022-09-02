@@ -18,14 +18,7 @@ $client->initiateSession(
     $credentials->username,
     $credentials->password,
     ['ttl' => 1]
-);
-
-// echo "<pre>";
-// print_r(json_encode([
-//     "BhRestToken" => $client->getRestToken(),
-//     "restUrl" => $client->getRestUrl(),
-//     ]));
-// exit;
+); 
 
 
 $httpClient = new GuzzleClient([
