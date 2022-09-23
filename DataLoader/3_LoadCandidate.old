@@ -5,10 +5,10 @@ require "../config/database.php";
 require "../Models/ModelCandidate.php";
 #Entity
 use Illuminate\Database\Capsule\Manager as DB;
+use Models\ModelCandidate;
 
 use jonathanraftery\Bullhorn\Rest\Authentication\Client;
 use GuzzleHttp\Client as GuzzleClient;
-use Models\ModelCandidate;
 
 /**
  * getDataFromSqlServer
@@ -22,30 +22,15 @@ function getDataFromSqlServer()
         "Contact.ContactID",
         "=",
         "Candidate.ContactID"
-    )->where('IsCandidateOnly','1');
-    
-    $rows = file(getcwd().'/Candidate_log.txt');
-    $last_row = array_pop($rows);
-    $data = str_getcsv($last_row);
+    )->where('IsCandidateOnly','1')
+    ->orderBy('FullName','ASC');
 
-    
-    if(!empty($data))
-    {
-        if($data[0]!='MSSQL_CandidateID')
-        {
-            $model = $model->where('Contact.ContactID','>',$data[0]);
-        }
-    }
-    
-    $allRows = $model->orderBy('ContactID','ASC')->select(['Contact.*'])->get();
+    $allRows = $model->get();
 
-    
-    print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
-    
     foreach ($allRows as $row)
     {
         $bhId = formatData($row);
-        
+
         @shell_exec('echo "'.$row->ContactID.'","'.$row->FullName.'","'.$bhId.'" >> Candidate_log.txt');
         sleep(3);
     }
@@ -58,38 +43,30 @@ function getDataFromSqlServer()
  * @return void
  */
 function formatData(ModelCandidate $data)
-{   
-    
-    $requestBody = [
-        "companyName" => $data->CurrentEmployer,
-        "occupation" => $data->Position ?? '',
-        "firstName" => $data->FirstName ?? '',
-        "lastName" => $data->LastName ?? '',
-        "mobile" => $data->Mobile ?? '',
-        "phone" => $data->Phone ?? '',
-        "name" => $data->FullName ?? '',
-        "email" => $data->Email ?? '',
-        "dateOfBirth" => $data->DateOfBirth,
-        "companyURL" => $data->LinkedInUrl,
-        "fax" => null,
-        "status" => "Active",
+{
+    $entity = [
         "address" => [
-            "address1" => $data->AddressLine1 ?? '',
-            "address2" => $data->AddressLine2 ?? '',
-            "city" => $data->AddressSuburb ?? '',
-            "state" => $data->AddressState ?? '',
-            "zip" => $data->AddressPostcode ?? '',
-            "countryName" => "United States",
-            "countryID" => null
-        ]
+            "address1" => $data->AddressLine1,
+            "address2" => $data->AddressLine2,
+            "city" => $data->AddressSuburb,
+            "state" => $data->AddressState,
+            "zip" => $data->AddressPostcode,
+            "countryID" => null,
+        ],
+        "companyName" => $data->CurrentEmployer,
+        "firstName" => $data->FirstName,
+        "name" => $data->FullName,
+        "lastName" => $data->LastName,
+        "occupation" => $data->Position,
+        "mobile" => $data->Mobile,
+        "phone" => $data->Phone,
+        "email" => $data->Email,
+        "occupation" => $data->Position,
+        "dateOfBirth" => $data->DateOfBirth,
+        "companyURL" => $data->LinkedInUrl
     ];
 
-    print_r($requestBody);
-    // exit;
-
-
-
-    return uploadDataToBullhorn($requestBody);
+    return uploadDataToBullhorn($entity);
 }
 
 

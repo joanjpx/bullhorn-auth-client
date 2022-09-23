@@ -27,6 +27,7 @@ function getDataFromSqlServer()
     $rows = file(getcwd().'/ClientContact_log.txt');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
+
     
     if(!empty($data))
     {
@@ -36,10 +37,18 @@ function getDataFromSqlServer()
         }
     }
     
-    $allRows = $model->orderBy('FullName','ASC')->select(['Contact.*'])->get();
+    $allRows = $model->orderBy('ContactID','ASC')->select(['Contact.*'])->get();
 
+    
+    
     foreach ($allRows as $row)
     {
+        if(empty($row->CompanyID))
+        {
+            @shell_exec('echo "'.$row->ContactID.'","'.$row->FullName.'" >> NotLoadedClientContact.txt');
+            continue;
+        }
+
         $bhId = formatData($row);
         
         @shell_exec('echo "'.$row->ContactID.'","'.$row->FullName.'","'.$bhId.'" >> ClientContact_log.txt');
@@ -71,37 +80,38 @@ function formatData(ModelClientContact $data)
             }
         }
         
+        fclose($rows);
     }
     
-    fclose($rows);
     
     $requestBody = [
-        "occupation" => $data->Position,
-        "firstName" => $data->FirstName,
-        "lastName" => $data->LastName,
-        "address" => [
-            "address1" => $data->AddressLine1,
-            "address2" => $data->AddressLine2,
-            "city" => $data->AddressSuburb,
-            "state" => $data->AddressState,
-            "zip" => $data->AddressPostcode,
-            "countryID" => null,
-        ],
-        "mobile" => $data->Mobile,
-        "phone" => $data->Phone,
-        "name" => $data->FullName,
-        "email" => $data->Email,
+        "occupation" => $data->Position ?? '',
+        "firstName" => $data->FirstName ?? '',
+        "lastName" => $data->LastName ?? '',
+        "mobile" => $data->Mobile ?? '',
+        "phone" => $data->Phone ?? '',
+        "name" => $data->FullName ?? '',
+        "email" => $data->Email ?? '',
+        "fax" => null,
         "status" => "Active",
+        "clientCorporation" => [
+            "id" => (int)$company[2]
+        ],
+        "address" => [
+            "address1" => $data->AddressLine1 ?? '',
+            "address2" => $data->AddressLine2 ?? '',
+            "city" => $data->AddressSuburb ?? '',
+            "state" => $data->AddressState ?? '',
+            "zip" => $data->AddressPostcode ?? '',
+            "countryName" => "United States",
+            "countryID" => null
+        ]
     ];
 
-    if($company[2])
-    {
-        $requestBody["clientCorporation"] = [
-            "id" => $company[2]
-        ];
-    }
 
-    print_r($requestBody);exit;
+    // exit;
+
+
 
     return uploadDataToBullhorn($requestBody);
 }
@@ -116,6 +126,8 @@ function formatData(ModelClientContact $data)
  */
 function uploadDataToBullhorn(array $candidate) : int
 {
+
+    print_r($candidate);
 
     $credentialsFileName = __DIR__ . '/../client-credentials.json';
     $credentialsFile = fopen($credentialsFileName, 'r');
