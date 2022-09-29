@@ -19,11 +19,6 @@ use Models\ModelCandidate;
  */
 function getDataFromSqlServer()
 {
-    // if(file_exists('Backup/201911/7706346.original.doc')) 
-    // {
-    //     print_r("EXISTE");exit;
-    // }
-
 
     $model = (new ModelCandidate)
     ->leftJoin(
@@ -65,7 +60,8 @@ function getDataFromSqlServer()
         'Attachment.*'
     ])->get();
 
-   
+
+    print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
 
     
     foreach ($allRows as $row)
@@ -121,7 +117,7 @@ function getBullhornCandidateId(int $mssqlId)
 {
     $rows = fopen(getcwd().'/Candidate_log.txt','r');
         
-    while (($line = fgetcsv($rows)) !== FALSE) 
+    while (($line = fgetcsv($rows,0,',','"')) !== FALSE) 
     {
         if($line[0]==$mssqlId) return $line[2]; 
     }
@@ -171,17 +167,21 @@ function uploadDataToBullhorn(string $fullPath, int $CandidateId, string $fileNa
                     'name' => $fileName,
                     'contents' => Utils::tryFopen($fullPath, 'r'),
                     'headers'  => [
-                        'Content-Type' => '<Content-type header>'
+                        'Content-Type' => 'application/json'
                     ]
                 ]
             ]
         ]
     );
 
-    $data = json_decode($response->getBody());
+    // print_r($response);
+    // print_r($response->getBody()->getContents());exit;
 
 
-    // print_r($data);exit;
+    $data = json_decode($response->getBody()->getContents());
+    // print_r("aaaaa");
+    $client->refreshSession();
+
     return $data->fileId;
 }
 

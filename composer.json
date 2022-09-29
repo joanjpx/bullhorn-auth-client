@@ -13,7 +13,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "league/oauth2-client": "^2.3",
+        "league/oauth2-client": "^2.6",
         "guzzlehttp/guzzle": "~6.0",
         "illuminate/database": "^9.26"
     },
