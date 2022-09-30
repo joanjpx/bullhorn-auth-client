@@ -36,13 +36,37 @@ $httpClient = new GuzzleClient([
 // Candidate
 
 // request body
-$requestBody = json_decode('{"comments":"bbbbbbbbbbbbb","multipleNotes":false,"personReference":{"id":455,"searchEntity":"Candidate","firstName":"Gian","lastName":"Vespa"},"action":"Other","nextAction":"None","minutesSpent":0}', true);
 
+$query = [
+    "comments" => "bbbbbbbbbbbbb",
+    "multipleNotes" => false,
+    "personReference" => [
+        "id" => 455,
+        "searchEntity" => "Candidate",
+        "firstName" => "",
+        "lastName" => "",
+    ],
+    "action" => "Other",
+    "nextAction" => "None",
+    "minutesSpent" => 0
+];
 
 
 $response = $httpClient->request('PUT', 'entity/Note',
     [
-        'json' => $requestBody
+        'json' => [
+            "comments" => "bbbbbbbbbbbbb",
+            "multipleNotes" => false,
+            "personReference" => [
+                "id" => 455,
+                "searchEntity" => "Candidate",
+                "firstName" => "",
+                "lastName" => "",
+            ],
+            "action" => "Other",
+            "nextAction" => "None",
+            "minutesSpent" => 0
+        ]
     ]
 );
 
@@ -50,7 +74,7 @@ $response = $httpClient->request('PUT', 'entity/Note',
 // $response = $httpClient->request('GET', 'entity/Candidate/93?fields=id,firstName,middleName,lastName,status');
 
 // return json
-echo $response->getBody();
+echo $response->getBody()->getContents();
 exit;
 
 
