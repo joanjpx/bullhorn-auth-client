@@ -86,14 +86,22 @@ function getDataFromSqlServer()
 
                 if($CandidateBullhornID)
                 {
-                    $uploadedFileId = uploadDataToBullhorn($fullPath, $CandidateBullhornID, $row->FileName);
+                    try{
+
+                        $uploadedFileId = uploadDataToBullhorn($fullPath, $CandidateBullhornID, $row->FileName);
+                        @shell_exec('echo "'.$row->CandidateAttachmentID.'", "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'", "'.$CandidateBullhornID.'", "'.$uploadedFileId.'" >> CandidateResumeFile_log.txt');
+                        // var_dump($file);
+                        print_r("LOADED: ".$fullPath."\n");
+                    
+                    }catch(Exception $e)
+                    {
+                        @shell_exec('echo "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'" >> NotLoadedCandidateResumeFile.txt');
+                        continue;
+                    }
 
                 }
                 // $file = Utils::tryFopen($fullPath, 'r');
 
-                @shell_exec('echo "'.$row->CandidateAttachmentID.'", "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'", "'.$CandidateBullhornID.'", "'.$uploadedFileId.'" >> CandidateResumeFile_log.txt');
-                // var_dump($file);
-                print_r("LOADED: ".$fullPath."\n");
 
                 sleep(3);
 
@@ -180,7 +188,7 @@ function uploadDataToBullhorn(string $fullPath, int $CandidateId, string $fileNa
 
     $data = json_decode($response->getBody()->getContents());
     // print_r("aaaaa");
-    $client->refreshSession();
+    // $client->refreshSession();
 
     return $data->fileId;
 }
