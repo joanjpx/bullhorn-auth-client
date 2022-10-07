@@ -171,7 +171,7 @@ function uploadDataToBullhorn(int $CandidateId, string $comment) : int
 
     $data = json_decode($response->getBody()->getContents());
     // print_r("aaaaa");
-    $client->refreshSession();
+    // $client->refreshSession();
 
     return $data->changedEntityId;
 }
