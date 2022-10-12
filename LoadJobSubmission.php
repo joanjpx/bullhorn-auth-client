@@ -18,14 +18,7 @@ $client->initiateSession(
     $credentials->username,
     $credentials->password,
     ['ttl' => 1]
-);
-
-// echo "<pre>";
-// print_r(json_encode([
-//     "BhRestToken" => $client->getRestToken(),
-//     "restUrl" => $client->getRestUrl(),
-//     ]));
-// exit;
+); 
 
 
 $httpClient = new GuzzleClient([
@@ -38,33 +31,50 @@ $httpClient = new GuzzleClient([
 // make request 
 
 // mass update
-$response = $httpClient->request('GET', 'massUpdate');
+// $response = $httpClient->request('GET', 'massUpdate');
 
 // Candidate
 
 // request body
-$requestBody = [
-    "firstName" => "Jonah",
-    "middleName" => "R",
-    "lastName" => "Hill",
-    "email" => "jhill@test.com",
-    "status" => "02-Active"
+
+$query = [
+    "comments" => "bbbbbbbbbbbbb",
+    "multipleNotes" => false,
+    "personReference" => [
+        "id" => 455,
+        "searchEntity" => "Candidate",
+        "firstName" => "",
+        "lastName" => "",
+    ],
+    "action" => "Other",
+    "nextAction" => "None",
+    "minutesSpent" => 0
 ];
 
 
+$response = $httpClient->request('PUT', 'entity/Candidate/',
+    [
+        'json' => [
+            "comments" => "bbbbbbbbbbbbb",
+            "multipleNotes" => false,
+            "personReference" => [
+                "id" => 455,
+                "searchEntity" => "Candidate",
+                "firstName" => "",
+                "lastName" => "",
+            ],
+            "action" => "Other",
+            "nextAction" => "None",
+            "minutesSpent" => 0
+        ]
+    ]
+);
 
-// $response = $httpClient->request('PUT', 'entity/Candidate',
-//     [
-//         'json' => $requestBody
-//     ]
-// );
 
-// myCandidates
-// $response = $httpClient->request('GET', 'entity/Candidate/78/tasks?fields=*');
-
+// $response = $httpClient->request('GET', 'entity/Candidate/93?fields=id,firstName,middleName,lastName,status');
 
 // return json
-echo $response->getBody();
+echo $response->getBody()->getContents();
 exit;
 
 
