@@ -18,7 +18,7 @@ $client->initiateSession(
     $credentials->username,
     $credentials->password,
     ['ttl' => 1]
-); 
+);
 
 
 $httpClient = new GuzzleClient([
@@ -51,21 +51,30 @@ $query = [
     "minutesSpent" => 0
 ];
 
-
-$response = $httpClient->request('PUT', 'entity/Candidate/',
+$response = $httpClient->request(
+    'PUT',
+    'entity/Candidate/',
     [
+
         'json' => [
-            "comments" => "bbbbbbbbbbbbb",
-            "multipleNotes" => false,
+            "id" => 22,
+            "jobOrder" => [
+                "id" => 3,
+                "title" => "Microsoft Dynamics 365 CRM Developer",
+                "clientCorporation" => [
+                    "id" => 1,
+                    "name" => "Protective Life"
+                ]
+            ],
             "personReference" => [
                 "id" => 455,
                 "searchEntity" => "Candidate",
                 "firstName" => "",
                 "lastName" => "",
             ],
-            "action" => "Other",
-            "nextAction" => "None",
-            "minutesSpent" => 0
+            "status" => "Submitted",
+            "dateLastModified" => 1662091755737,
+            "_score" => 1.0
         ]
     ]
 );
