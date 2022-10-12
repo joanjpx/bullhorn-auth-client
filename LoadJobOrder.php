@@ -37,35 +37,22 @@ $httpClient = new GuzzleClient([
 
 // request body
 
-$query = [
-    "comments" => "bbbbbbbbbbbbb",
-    "multipleNotes" => false,
-    "personReference" => [
-        "id" => 455,
-        "searchEntity" => "Candidate",
-        "firstName" => "",
-        "lastName" => "",
-    ],
-    "action" => "Other",
-    "nextAction" => "None",
-    "minutesSpent" => 0
-];
 
 
-$response = $httpClient->request('PUT', 'entity/Candidate/',
+$response = $httpClient->request('PUT', 'entity/JobOrder',
     [
         'json' => [
-            "comments" => "bbbbbbbbbbbbb",
-            "multipleNotes" => false,
-            "personReference" => [
-                "id" => 455,
-                "searchEntity" => "Candidate",
-                "firstName" => "",
-                "lastName" => "",
+            "clientContact" => [
+                "id" => 495,
             ],
-            "action" => "Other",
-            "nextAction" => "None",
-            "minutesSpent" => 0
+            "clientCorporation" => [
+                "id" => 495,
+            ],
+            "title" => "JobTest3",
+            "description" => "Free Description of Job Order",
+            "employmentType" => "Direct Hire",
+            "isOpen" => true,
+            "status" => "Accepting Candidates"
         ]
     ]
 );
