@@ -41,18 +41,21 @@ $httpClient = new GuzzleClient([
 
 $response = $httpClient->request('PUT', 'entity/JobOrder',
     [
+        
         'json' => [
             "clientContact" => [
-                "id" => 495,
+                "id" => 16969,
             ],
             "clientCorporation" => [
                 "id" => 495,
             ],
-            "title" => "JobTest3",
+            "title" => "Dated Job",
             "description" => "Free Description of Job Order",
-            "employmentType" => "Direct Hire",
+            "employmentType" => "Temporary",
             "isOpen" => true,
-            "status" => "Accepting Candidates"
+            "status" => "Accepting Candidates",
+            "salaryUnit" => "per month",
+            "startDate" => strtotime("2020-01-16 23:59:59") * 1000
         ]
     ]
 );
