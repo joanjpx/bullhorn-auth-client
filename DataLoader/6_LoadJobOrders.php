@@ -45,6 +45,7 @@ function getDataFromSqlServer()
         "=",
         "JobOrder.CompanyID"
     )
+    ->whereNotNull('JobOrder.CompanyID')
     ->orderBy('JobOrder.JobOrderID','ASC');
 
     $rows = file(getcwd().'/JobOrder_log.txt');
@@ -201,7 +202,7 @@ function uploadDataToBullhorn($row, $corpId, $contactId) : int
         // "status" => "Accepting Candidates"
     ];
 
-    if(!empty($salaryUnit[$row->SalaryType])) $request["salaryUnit"] = $salaryUnit[$row->SalaryType];
+    if(!empty($salaryUnit[$row->SalaryType])) $requestBody["salaryUnit"] = $salaryUnit[$row->SalaryType];
 
     print_r($requestBody);
 
