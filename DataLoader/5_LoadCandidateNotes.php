@@ -18,7 +18,6 @@ use Models\ModelCandidate;
  */
 function getDataFromSqlServer()
 {
-
     // SELECT 
     //     T1.ContactID,
     //     T0.FullName,
@@ -32,38 +31,36 @@ function getDataFromSqlServer()
     // ORDER BY T0.ContactID,T3.DateCreated ASC
 
     $model = (new ModelCandidate)
-    ->leftJoin(
-        "Contact AS T1",
-        "T1.ContactID",
-        "=",
-        "Candidate.ContactID"
-    )->leftJoin(
-        'CandidateNote AS T2',
-        'Candidate.ContactID',
-        '=',
-        'T2.ContactID'
-    )->leftJoin(
-        'Note AS T3',
-        'T3.NoteID',
-        '=',
-        'T2.NoteID'
-    )
-    ->where('IsCandidateOnly','1')
-    ->whereNotNull('T3.Text')
-    ->orderBy('T3.UniqueID','ASC');
+        ->leftJoin(
+            "Contact AS T1",
+            "T1.ContactID",
+            "=",
+            "Candidate.ContactID"
+        )->leftJoin(
+            'CandidateNote AS T2',
+            'Candidate.ContactID',
+            '=',
+            'T2.ContactID'
+        )->leftJoin(
+            'Note AS T3',
+            'T3.NoteID',
+            '=',
+            'T2.NoteID'
+        )
+        ->where('IsCandidateOnly', '1')
+        ->whereNotNull('T3.Text')
+        ->orderBy('T3.UniqueID', 'ASC');
 
-    $rows = file(getcwd().'/CandidateNotes_log.txt');
+    $rows = file(getcwd() . '/CandidateNotes_log.txt');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
-    
-    if(!empty($data))
-    {
-        if($data[0]!='UniqueID' && !empty($data[0]))
-        {
-            $model = $model->where('T3.UniqueID','>',$data[0]);
+
+    if (!empty($data)) {
+        if ($data[0] != 'UniqueID' && !empty($data[0])) {
+            $model = $model->where('T3.UniqueID', '>', $data[0]);
         }
     }
-   
+
     $allRows = $model->select([
         "T3.UniqueID",
         "T3.NoteID",
@@ -73,11 +70,10 @@ function getDataFromSqlServer()
     ])->get();
 
 
-    print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
+    print_r("####### Restantes...................: [" . $allRows->count() . "] ###### \n");
 
-    
-    foreach ($allRows as $row)
-    {
+
+    foreach ($allRows as $row) {
         // UniqueID
         // NoteID
         // ContactID
@@ -85,17 +81,15 @@ function getDataFromSqlServer()
         // Text        
         $CandidateBullhornID = getBullhornCandidateId($row->ContactID);
 
-        if($CandidateBullhornID)
-        {
+        if ($CandidateBullhornID) {
             $changedEntityId = uploadDataToBullhorn($CandidateBullhornID, $row->Text);
 
-            if($changedEntityId)
-            {
-                @shell_exec('echo "'.$row->UniqueID.'", "'.$row->NoteID.'", "'.$row->ContactID.'", "'.$row->FullName.'", "'.$row->Text.'", "'.$CandidateBullhornID.'", "'.$changedEntityId.'" >> CandidateNotes_log.txt');
-            }else{
+            if ($changedEntityId) {
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $row->Text . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> CandidateNotes_log.txt');
+            } else {
 
-                @shell_exec('echo "'.$row->UniqueID.'", "'.$row->NoteID.'", "'.$row->ContactID.'", "'.$row->FullName.'", "'.$row->Text.'", "'.$CandidateBullhornID.'", "'.$changedEntityId.'" >> NotLoadedCandidateNotes_log.txt');
-            }            
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $row->Text . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> NotLoadedCandidateNotes_log.txt');
+            }
             sleep(2);
         }
     }
@@ -104,15 +98,14 @@ function getDataFromSqlServer()
 
 function getBullhornCandidateId(int $mssqlId)
 {
-    $rows = fopen(getcwd().'/Candidate_log.txt','r');
-        
-    while (($line = fgetcsv($rows,0,',','"')) !== FALSE) 
-    {
-        if($line[0]==$mssqlId) return $line[2]; 
+    $rows = fopen(getcwd() . '/Candidate_log.txt', 'r');
+
+    while (($line = fgetcsv($rows, 0, ',', '"')) !== FALSE) {
+        if ($line[0] == $mssqlId) return $line[2];
     }
 
     fclose($rows);
-    
+
     return false;
 }
 
@@ -122,10 +115,10 @@ function getBullhornCandidateId(int $mssqlId)
  * @param  mixed $data
  * @return void
  */
-function uploadDataToBullhorn(int $CandidateId, string $comment) : int
+function uploadDataToBullhorn(int $CandidateId, string $comment): int
 {
 
-    $credentialsFileName = __DIR__ . '/../client-credentials.json';
+    $credentialsFileName = getcwd() . '/../client-credentials.json';
     $credentialsFile = fopen($credentialsFileName, 'r');
     $credentialsJson = fread($credentialsFile, filesize($credentialsFileName));
     $credentials = json_decode($credentialsJson);
@@ -163,7 +156,9 @@ function uploadDataToBullhorn(int $CandidateId, string $comment) : int
 
     print_r($requestBody);
 
-    $response = $httpClient->request('PUT', 'entity/Note',
+    $response = $httpClient->request(
+        'PUT',
+        'entity/Note',
         [
             'json' => $requestBody
         ]
