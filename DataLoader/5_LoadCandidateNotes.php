@@ -85,10 +85,10 @@ function getDataFromSqlServer()
             $changedEntityId = uploadDataToBullhorn($CandidateBullhornID, $row->Text);
 
             if ($changedEntityId) {
-                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $row->Text . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> CandidateNotes_log.txt');
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . '' . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> CandidateNotes_log.txt');
             } else {
 
-                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $row->Text . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> NotLoadedCandidateNotes_log.txt');
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . '' . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> NotLoadedCandidateNotes_log.txt');
             }
             sleep(2);
         }
