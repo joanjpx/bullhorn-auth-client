@@ -51,7 +51,7 @@ function getDataFromSqlServer()
         ->whereNotNull('T3.Text')
         ->orderBy('T3.UniqueID', 'ASC');
 
-    $rows = file(getcwd() . '/CandidateNotes_log.txt');
+    $rows = file(getcwd() . '/CandidateNotes_log2.txt');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
 
@@ -61,6 +61,8 @@ function getDataFromSqlServer()
         }
     }
 
+
+    
     $allRows = $model->select([
         "T3.UniqueID",
         "T3.NoteID",
@@ -68,12 +70,25 @@ function getDataFromSqlServer()
         "T1.FullName",
         "T3.Text"
     ])->get();
+        
+    // print_r($allRows);exit;
 
-
-    print_r("####### Restantes...................: [" . $allRows->count() . "] ###### \n");
+    // print_r("####### Restantes...................: [" . $allRows->count() . "] ###### \n");
 
 
     foreach ($allRows as $row) {
+
+        $cli = "cat CandidateNotes_log.txt |grep "."'".'"' . $row->UniqueID . '", "' . $row->NoteID . '"'."'";
+
+        $prompt = shell_exec($cli);
+
+
+        var_dump($prompt);
+        
+        if(!empty($prompt))
+        {
+            continue;
+        }
         // UniqueID
         // NoteID
         // ContactID
@@ -84,11 +99,11 @@ function getDataFromSqlServer()
         if ($CandidateBullhornID) {
             $changedEntityId = uploadDataToBullhorn($CandidateBullhornID, $row->Text);
 
-            if ($changedEntityId) {
-                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . '' . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> CandidateNotes_log.txt');
+            if (!empty($changedEntityId)) {
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> CandidateNotes_log2.txt');
             } else {
 
-                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . '' . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> NotLoadedCandidateNotes_log.txt');
+                @shell_exec('echo "' . $row->UniqueID . '", "' . $row->NoteID . '", "' . $row->ContactID . '", "' . $row->FullName . '", "' . $CandidateBullhornID . '", "' . $changedEntityId . '" >> NotLoadedCandidateNotes_log.txt');
             }
             sleep(2);
         }
@@ -166,7 +181,7 @@ function uploadDataToBullhorn(int $CandidateId, string $comment): int
 
     $data = json_decode($response->getBody()->getContents());
     // print_r("aaaaa");
-    // $client->refreshSession();
+    $client->refreshSession();
 
     return $data->changedEntityId;
 }

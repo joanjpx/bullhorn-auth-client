@@ -1,4 +1,4 @@
-"UniqueID", "NoteID", "ContactID", "FullName", "Text", "BULLHORN_ID", "BULLHORN_CANDIDATE_ID"
+"UniqueID", "NoteID", "ContactID", "FullName", "Text", "BULLHORN_CANDIDATE_ID", "BULLHORN_ID"
 "38583358", "99F2D94A-E546-4F3A-9AE1-0B00D239CFF1", "5426023", "Syed Zaidi", "Status changed from Applied to Unsuccessful by Ruben Garcia at 7:40am on November 26, 2019", "1266 ", "104" 
 "38583364", "E5DC14BA-9EA3-483B-A628-EF620F970B4D", "5426023", "Syed Zaidi", "his name already was submitted via bounty", "1266 ", "105" 
 "38583860", "F828385A-6B84-4AD3-B833-D59C1E96A3C1", "5427094", "Steven Chen", "Candidate status changed automatically from Active to Active - Interviewing by Ruben Garcia when Job Application status was changed to Resume Submitted, Job: Cloud, Network and Systems Security Engineer,  at 8:16am on November 26, 2019", "1267 ", "106" 
