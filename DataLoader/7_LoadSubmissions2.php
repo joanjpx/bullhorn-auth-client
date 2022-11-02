@@ -20,6 +20,8 @@ function getDataFromSqlServer()
 {
     // SELECT T1.ApplicationID, T1.ContactID, T1.JobOrderID, T2.FullName FROM JobApplication AS T1 LEFT JOIN Contact AS T2 ON T2.ContactID=T1.ContactID ORDER BY ApplicationID ASC
 
+    // SELECT T1.ApplicationID, T1.ContactID, T1.JobOrderID, T2.FullName FROM JobApplication AS T1 LEFT JOIN Contact AS T2 ON T2.ContactID=T1.ContactID WHERE T1.JobOrderID IS NOT NULL ORDER BY ApplicationID ASC
+
     $model = (new ModelSubmission())
     ->leftJoin(
         "Contact AS T2",
@@ -33,9 +35,10 @@ function getDataFromSqlServer()
         "=",
         "JobApplication.JobOrderID"
     )
+    ->whereNotNull('JobApplication.JobOrderID')
     ->orderBy('JobApplication.ApplicationID','ASC');
 
-    $rows = file(getcwd().'/JobSubmission_log.txt');
+    $rows = file(getcwd().'/JobSubmission_log2.txt');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
     
@@ -58,12 +61,31 @@ function getDataFromSqlServer()
 
 
     print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
+    sleep(3);
 
     
     foreach ($allRows as $row)
     {
+
+        $cli = "cat JobSubmission_log.txt |grep "."'".'"' . $row->ApplicationID . '", "' . $row->ContactID . '"'."'";
+
+        $prompt = shell_exec($cli);
+
+        var_dump($prompt);
+        
+        if(!empty($prompt))
+        {
+            continue;
+        }
+
+        if(empty($row->JobOrderID) || empty($row->CompanyID))
+        {
+            continue;
+        }
+
         $candidateId = getBullhornCandidateId($row->ContactID);
         $jobOrderId = getBullhornJobOrderID($row->JobOrderID, $row->CompanyID);
+
 
         if(!empty($candidateId) && !empty($jobOrderId))
         {
@@ -74,7 +96,7 @@ function getDataFromSqlServer()
 
                 // "MSSQL_JobSubmissionID", "MSSQL_ContactID", "MSSQL_JobOrderID", "MSSQL_CompanyID", "MSSQL_FullName", "BH_CandidateID", "BH_JobOrderID", "BH_SubmissionID"
 
-                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> JobSubmission_log.txt');
+                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> JobSubmission_log2.txt');
             
             }else{
                 
@@ -119,7 +141,6 @@ function getBullhornJobOrderID(?string $msJobOrderID, ?string $msCompanyID) : in
 
     $grep = shell_exec($cli);
     $array = explode('", "',$grep);
-
 
     return intval($array[5]);
 }
