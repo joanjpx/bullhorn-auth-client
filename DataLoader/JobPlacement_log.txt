@@ -1,0 +1,1 @@
+"MSSQL_JobPlacementID", "MSSQL_ContactID", "MSSQL_JobOrderID", "MSSQL_CompanyID", "MSSQL_FullName", "BH_CandidateID", "BH_JobOrderID", "BH_PlacementID"

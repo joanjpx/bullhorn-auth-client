@@ -82,28 +82,7 @@ function getDataFromSqlServer()
         $candidateId = getBullhornCandidateId($row->ContactID);
         $jobOrderId = getBullhornJobOrderID($row->JobOrderID, $row->CompanyID);
 
-
-        if(!empty($candidateId) && !empty($jobOrderId))
-        {
-            $changedEntityId = uploadDataToBullhorn($row, $candidateId, $jobOrderId);
-
-            if($changedEntityId)
-            {
-
-                // "MSSQL_JobSubmissionID", "MSSQL_ContactID", "MSSQL_JobOrderID", "MSSQL_CompanyID", "MSSQL_FullName", "BH_CandidateID", "BH_JobOrderID", "BH_SubmissionID"
-
-                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> JobSubmission_log2.txt');
-            
-            }else{
-                
-                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> NotLoadedJobSubmission_log.txt');
-            }
-            
-            sleep(2);
-        }else{
-                
-            @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.'" >> NotLoadedJobSubmission_log.txt');
-        }
+        @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.'" >> JobSubmission_log2.txt');
     }
 }
 
@@ -142,72 +121,6 @@ function getBullhornJobOrderID(?string $msJobOrderID, ?string $msCompanyID) : ?i
     $array = explode('", "',$grep);
 
     return !empty($array[5]) ? intval($array[5]) : null;
-}
-
-/**
- * uploadDataToBullhorn
- *
- * @param  mixed $data
- * @return void
- */
-function uploadDataToBullhorn($row, $candidateId, $jobOrderId) : int
-{
-
-    $credentialsFileName = __DIR__ . '/../client-credentials.json';
-    $credentialsFile = fopen($credentialsFileName, 'r');
-    $credentialsJson = fread($credentialsFile, filesize($credentialsFileName));
-    $credentials = json_decode($credentialsJson);
-
-    $client = new Client(
-        $credentials->clientId,
-        $credentials->clientSecret
-    );
-    $client->initiateSession(
-        $credentials->username,
-        $credentials->password,
-        ['ttl' => 1]
-    );
-
-    $httpClient = new GuzzleClient([
-        'base_uri' => $client->getRestUrl(),
-        'headers' => [
-            'BhRestToken' => $client->getRestToken(),
-        ],
-    ]);
-
-
-
-    $requestBody = [
-        "jobOrder" => [
-            'id' => $jobOrderId
-        ],
-        "candidate" => [
-            "id" => $candidateId,
-        ],
-        "status" => "Submitted",
-    ];
-
-    print_r($requestBody);
-
-    $response = $httpClient->request('PUT', 'entity/JobSubmission',
-        [
-            'json' => [
-                "jobOrder" => [
-                    'id' => intval($jobOrderId)
-                ],
-                "candidate" => [
-                    "id" => intval($candidateId),
-                ],
-                "status" => "Submitted",
-            ]
-        ]
-    );
-
-    $data = json_decode($response->getBody()->getContents());
-
-    $client->refreshSession();
-    
-    return $data->changedEntityId;
 }
 
 
