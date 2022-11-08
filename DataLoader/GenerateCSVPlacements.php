@@ -50,17 +50,19 @@ function getDataFromSqlServer()
    
     $allRows = $model->select([
         "Placement.ApplicationID",
-        "Placement.ContactID",
+        "Placement.CandidateContactID AS ContactID",
         "Placement.JobOrderID",
         "T2.FullName",
         "T3.CompanyID",
-        "Placement.DateCreated"
+        "Placement.DateCreated",
+        "Placement.StartDate"
     ])->get();
 
 
     print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
     sleep(3);
 
+    $csvToWrite = fopen("./JobPlacement2Log.csv", "w");
     
     foreach ($allRows as $row)
     {
@@ -79,28 +81,23 @@ function getDataFromSqlServer()
         $candidateId = getBullhornCandidateId($row->ContactID);
         $jobOrderId = getBullhornJobOrderID($row->JobOrderID, $row->CompanyID);
 
+        $csvRow = [
+            $row->ApplicationID,
+            $row->ContactID,
+            $row->JobOrderID,
+            $row->CompanyID,
+            $row->FullName,
+            $candidateId,
+            $jobOrderId,
+            "",
+            $row->DateCreated,
+            $row->StartDate
+        ];
 
-        if(!empty($candidateId) && !empty($jobOrderId))
-        {
-            $changedEntityId = uploadDataToBullhorn($row, $candidateId, $jobOrderId);
+        fputcsv($csvToWrite, $csvRow, ',','"');
 
-            if($changedEntityId)
-            {
+        // @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.'" >> JobPlacement2_log.txt');
 
-                // "MSSQL_JobSubmissionID", "MSSQL_ContactID", "MSSQL_JobOrderID", "MSSQL_CompanyID", "MSSQL_FullName", "BH_CandidateID", "BH_JobOrderID", "BH_SubmissionID"
-
-                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> JobPlacement_log.txt');
-            
-            }else{
-                
-                @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.$changedEntityId.'" >> NotLoadedJobPlacement_log.txt');
-            }
-            
-            sleep(2);
-        }else{
-                
-            @shell_exec('echo "'.$row->ApplicationID.'", "'.$row->ContactID.'", "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->FullName.'", "'.$candidateId.'", "'.$jobOrderId.'", "'.'" >> NotLoadedJobPlacement_log.txt');
-        }
     }
 }
 
