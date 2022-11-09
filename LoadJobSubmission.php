@@ -52,8 +52,8 @@ $query = [
 ];
 
 $response = $httpClient->request(
-    'PUT',
-    'entity/JobSubmission',
+    'GET',
+    'entity/JobOrder/Placement',
     [
 
         'json' => [

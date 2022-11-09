@@ -18,7 +18,7 @@ $client->initiateSession(
     $credentials->username,
     $credentials->password,
     ['ttl' => 1]
-); 
+);
 
 
 $httpClient = new GuzzleClient([
@@ -51,21 +51,22 @@ $query = [
     "minutesSpent" => 0
 ];
 
-
-$response = $httpClient->request('PUT', 'entity/Candidate/',
+$response = $httpClient->request(
+    'PUT',
+    'entity/Placement',
     [
+
         'json' => [
-            "comments" => "bbbbbbbbbbbbb",
-            "multipleNotes" => false,
-            "personReference" => [
-                "id" => 455,
-                "searchEntity" => "Candidate",
-                "firstName" => "",
-                "lastName" => "",
+            'jobSubmission' => [
+                'id' => 4734
             ],
-            "action" => "Other",
-            "nextAction" => "None",
-            "minutesSpent" => 0
+            "jobOrder" => [
+                "id" => 41
+            ],
+            "candidate" => [
+                "id" => 1266,
+            ],
+            "status" => "Submitted",
         ]
     ]
 );
