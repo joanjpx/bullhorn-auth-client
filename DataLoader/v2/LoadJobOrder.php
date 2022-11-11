@@ -100,7 +100,7 @@ function getDataFromSqlServer()
 
             }, $data);
 
-            @shell_exec('echo "'.$data[0].'","'.$data[1].'","'.$data[2].'","'.$data[3].'","'.$data[4].'","'.$data[5].'" >> JobOrders_logv2.csv');
+            @shell_exec('echo "'.$data[0].'","'.$data[1].'","'.$data[2].'","'.$data[3].'","'.$data[4].'","'.$data[5].'" >> JobOrder_logv2.csv');
 
             continue;
             
@@ -120,10 +120,10 @@ function getDataFromSqlServer()
     
                 if($changedEntityId)
                 {
-                    @shell_exec('echo "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->ContactID.'", "'.$row->JobTitle.'", "'.$row->Name.'", "'.$changedEntityId.'" >> JobOrder_log.txt');
+                    @shell_exec('echo "'.$row->JobOrderID.'","'.$row->CompanyID.'","'.$row->ContactID.'","'.$row->JobTitle.'","'.$row->Name.'","'.$changedEntityId.'" >> JobOrder_logv2.csv');
                 }else{
     
-                    @shell_exec('echo "'.$row->JobOrderID.'", "'.$row->CompanyID.'", "'.$row->ContactID.'", "'.$row->JobTitle.'", "'.$row->Name.'", "'.$changedEntityId.'" >> NotLoadedJobOrder_log.txt');
+                    @shell_exec('echo "'.$row->JobOrderID.'","'.$row->CompanyID.'","'.$row->ContactID.'","'.$row->JobTitle.'","'.$row->Name.'","'.$changedEntityId.'" >> NotLoadedJobOrder_log.csv');
                 }
                 
                 sleep(2);
