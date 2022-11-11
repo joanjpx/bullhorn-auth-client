@@ -166,6 +166,7 @@ function uploadDataToBullhorn(array $candidate) : int
     );
 
     $data = json_decode($response->getBody());
+    $client->refreshSession();
 
     return $data->changedEntityId;
 }
