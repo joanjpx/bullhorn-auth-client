@@ -52,11 +52,16 @@ $query = [
 ];
 
 $response = $httpClient->request(
-    'PUT',
+    'GET',
     'entity/Placement',
     [
 
         'json' => [
+            'id' => null,
+            'bteSyncStatus' => null,
+            'daysGuaranteed' => 0,
+            'fee' => 0.0,
+            'hoursPerDay' => 0,
             'jobSubmission' => [
                 'id' => 4734
             ],
@@ -66,7 +71,6 @@ $response = $httpClient->request(
             "candidate" => [
                 "id" => 1266,
             ],
-            "status" => "Submitted",
         ]
     ]
 );
