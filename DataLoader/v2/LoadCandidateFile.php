@@ -1,8 +1,8 @@
 <?php
-require "../vendor/autoload.php";
-require "../config/database.php";
+require "../../vendor/autoload.php";
+require "../../config/database.php";
 #Models
-require "../Models/ModelCandidate.php";
+require "../../Models/ModelCandidate.php";
 #Entity
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -11,7 +11,6 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Psr7\Utils;
 use Models\ModelCandidate;
 
-
 /**
  * getDataFromSqlServer
  *
@@ -19,7 +18,6 @@ use Models\ModelCandidate;
  */
 function getDataFromSqlServer()
 {
-
     $model = (new ModelCandidate)
     ->leftJoin(
         "Contact",
@@ -39,12 +37,12 @@ function getDataFromSqlServer()
         '=',
         'Attachment.CandidateAttachmentID'
     )
-    ->where('IsCandidateOnly','1');
+    ->where('IsCandidateOnly','1')
+    ->whereNotNull('CandidateAttachmentID');
    
-    $rows = file(getcwd().'/CandidateResumeFile_log.txt');
+    $rows = file(getcwd().'/CandidateFile_logv2.csv');
     $last_row = array_pop($rows);
     $data = str_getcsv($last_row);
-
     
     if(!empty($data))
     {
@@ -53,21 +51,45 @@ function getDataFromSqlServer()
             $model = $model->where('Attachment.CandidateAttachmentID','>',$data[0]);
         }
     }
-   
+    
     $allRows = $model->orderBy('Attachment.CandidateAttachmentID','ASC')->select([
         'Candidate.ContactID',
         'CandidateAttachment.FileName',
         'Attachment.*'
     ])->get();
 
-
     print_r("####### Restantes...................: [".$allRows->count()."] ###### \n");
-
     
     foreach ($allRows as $row)
     {
 
-        print_r($row);
+        $search = '"'.$row->CandidateAttachmentID.'", "'.$row->ContactID.'", "';
+
+        $cli = "cat ./CandidateResumeFile_log.txt |grep '".$search."'";
+        
+        $prompt = shell_exec($cli);
+        
+        if(!empty($prompt))
+        {
+            print_r("####### ALREADY LOADED #######"."\n");
+
+            $data = explode('", "',$prompt);
+
+            $data = array_map(function($e){
+                return trim(str_replace('"','',$e));
+            }, $data);
+
+            
+            @shell_exec("echo ".'"'.$data[0].'","'.$data[1].'","'.$data[2].'","'.$data[3].'","'.$data[4].'","'.$data[5].'"'." >> CandidateFile_logv2.csv");
+            
+            continue;
+            
+        }else{
+            print_r("####### NOT LOADED #######"."\n");
+        }
+        
+        // exit;
+
 
         $fileName = $row->StorageName;
 
@@ -81,34 +103,31 @@ function getDataFromSqlServer()
 
             if(file_exists($fullPath))
             {
-
+                print_r($row);
                 $CandidateBullhornID = getBullhornCandidateId($row->ContactID);
+
+                print_r($CandidateBullhornID);exit;
 
                 if($CandidateBullhornID)
                 {
                     try{
 
                         $uploadedFileId = uploadDataToBullhorn($fullPath, $CandidateBullhornID, $row->FileName);
-                        @shell_exec('echo "'.$row->CandidateAttachmentID.'", "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'", "'.$CandidateBullhornID.'", "'.$uploadedFileId.'" >> CandidateResumeFile_log.txt');
+                        @shell_exec('echo "'.$row->CandidateAttachmentID.'","'.$row->ContactID.'","'.$fullPath.'","'.$row->FileName.'","'.$CandidateBullhornID.'","'.$uploadedFileId.'" >> CandidateFile_logv2.csv');
                         print_r("LOADED: ".$fullPath."\n");
                     
                     }catch(Exception $e)
                     {
-                        @shell_exec('echo "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'" >> NotLoadedCandidateResumeFile.txt');
+                        @shell_exec('echo "'.$row->ContactID.'","'.$fullPath.'","'.$row->FileName.'" >> NotLoadedCandidateResumeFile.txt');
                         continue;
                     }
-
                 }
-
                 sleep(1);
-
-            }else{
-                
-                @shell_exec('echo "'.$row->ContactID.'", "'.$fullPath.'", "'.$row->FileName.'" >> NotLoadedCandidateResumeFile.txt');
             }
         }
     }
 }
+
 
 
 function getBullhornCandidateId(int $mssqlId)
@@ -124,6 +143,8 @@ function getBullhornCandidateId(int $mssqlId)
     
     return false;
 }
+
+
 
 /**
  * uploadDataToBullhorn
@@ -172,13 +193,7 @@ function uploadDataToBullhorn(string $fullPath, int $CandidateId, string $fileNa
         ]
     );
 
-    // print_r($response);
-    // print_r($response->getBody()->getContents());exit;
-
-
     $data = json_decode($response->getBody()->getContents());
-    // print_r("aaaaa");
-    // $client->refreshSession();
 
     return $data->fileId;
 }
