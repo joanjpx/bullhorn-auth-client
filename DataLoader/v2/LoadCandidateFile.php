@@ -155,7 +155,7 @@ function getBullhornCandidateId(int $mssqlId)
 function uploadDataToBullhorn(string $fullPath, int $CandidateId, string $fileName) : int
 {
 
-    $credentialsFileName = __DIR__ . '/../client-credentials.json';
+    $credentialsFileName = __DIR__ . '/../../client-credentials.json';
     $credentialsFile = fopen($credentialsFileName, 'r');
     $credentialsJson = fread($credentialsFile, filesize($credentialsFileName));
     $credentials = json_decode($credentialsJson);
