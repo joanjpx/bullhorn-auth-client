@@ -44,7 +44,11 @@ function getDataFromSqlServer()
         }
     }
    
-    $allRows = $model->select([
+    $allRows = $model
+    ->whereNotNull('T3.CompanyID')
+    ->whereNotNull('JobApplication.JobOrderID')
+    ->whereNotNull('JobApplication.ContactID')
+    ->select([
         "JobApplication.ApplicationID",
         "JobApplication.ContactID",
         "JobApplication.JobOrderID",
@@ -101,6 +105,7 @@ function getDataFromSqlServer()
             
             @shell_exec('echo "'.$row->ApplicationID.'","'.$row->ContactID.'","'.$row->JobOrderID.'","'.$row->CompanyID.'","'.trim(str_replace('"','',$row->FullName)).'","'.$candidateId.'","'.$jobOrderId.'","'.$changedEntityId.'" >> Submission_logv2.csv');
             
+            sleep(3);
         }catch(Exception $e)
         {
             @shell_exec('echo "'.$row->ApplicationID.'","'.$row->ContactID.'","'.$row->JobOrderID.'","'.$row->CompanyID.'","'.trim(str_replace('"','',$row->FullName)).'","'.$candidateId.'","'.$jobOrderId.'","'.$changedEntityId.'" >> NotLoadedSubmission_log.csv');
@@ -112,11 +117,11 @@ function getDataFromSqlServer()
 
 function getBullhornCandidateId(int $mssqlId)
 {
-    $rows = fopen(getcwd().'/Candidate_log.txt','r');
+    $rows = fopen(getcwd().'/Candidate_logv2.csv','r');
         
     while (($line = fgetcsv($rows,0,',','"')) !== FALSE) 
     {
-        if($line[0]==$mssqlId) return $line[2]; 
+        if($line[0]==$mssqlId) return intval($line[2]); 
     }
 
     fclose($rows);
@@ -129,7 +134,7 @@ function getBullhornCandidateId(int $mssqlId)
 
 function getBullhornJobOrderID(?string $msJobOrderID, ?string $msCompanyID) : ?int
 {
-    $cli = "cat ./JobOrder_log.txt |grep '";
+    $cli = "cat ./JobOrder_logv2.csv |grep '";
     $cli.='"';
     $cli.=$msJobOrderID;
     $cli.='"';
@@ -139,10 +144,8 @@ function getBullhornJobOrderID(?string $msJobOrderID, ?string $msCompanyID) : ?i
     $cli.='"';
     $cli.="'";
 
-    print_r($cli);exit;
-
     $grep = shell_exec($cli);
-    $array = explode('", "',$grep);
+    $array = explode('","',$grep);
 
     return !empty($array[5]) ? intval($array[5]) : null;
 }
@@ -186,7 +189,6 @@ function uploadDataToBullhorn($row, $candidateId, $jobOrderId) : int
     ];
 
     print_r($requestBody);
-    exit;
 
     $response = $httpClient->request('PUT', 'entity/JobSubmission',
         [

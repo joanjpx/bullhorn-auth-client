@@ -87,26 +87,41 @@ function getDataFromSqlServer()
         }else{
             print_r("####### NOT LOADED #######"."\n");
         }
-        
-        // exit;
 
 
         $fileName = $row->StorageName;
+        
 
-        if($fileName)
+        if(!empty($fileName))
         {
+            
             $parts = explode('/',$fileName);
             $fileName = $parts[2];
             $folder = $parts[0].$parts[1];
 
-            $fullPath = "Backup/".$folder."/".$fileName;
+            if($row->FileType=='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            {
+                $ext = 'docx';
+            }
+            
+            if($row->FileType=='application/pdf')
+            {
+                
+                $ext = 'pdf';
+            }
+
+            if($row->FileType=='application/msword')
+            {
+                $ext = 'doc';
+            }
+
+            $fullPath = "../Backup/".$folder."/".$fileName.".".$ext;
+
 
             if(file_exists($fullPath))
             {
-                print_r($row);
+                
                 $CandidateBullhornID = getBullhornCandidateId($row->ContactID);
-
-                print_r($CandidateBullhornID);exit;
 
                 if($CandidateBullhornID)
                 {
