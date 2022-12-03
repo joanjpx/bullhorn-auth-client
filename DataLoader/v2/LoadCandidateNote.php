@@ -119,7 +119,7 @@ function getBullhornCandidateId(int $mssqlId)
     $rows = fopen(getcwd() . '/Candidate_logv2.csv', 'r');
 
     while (($line = fgetcsv($rows, 0, ',', '"')) !== FALSE) {
-        if ($line[0] == $mssqlId) return $line[2];
+        if ($line[0] == $mssqlId) return intval($line[2]);
     }
 
     fclose($rows);
